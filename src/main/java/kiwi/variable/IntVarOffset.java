@@ -19,47 +19,77 @@ import kiwi.core.PropagQueue;
 import kiwi.core.Propagator;
 import kiwi.core.Trail;
 
+/** */
 public class IntVarOffset implements IntVar {
 
-	private final IntVar variable;
-	private final int offset;
-	
-	public IntVarOffset(IntVar variable, int offset) {
-		this.variable = variable;
-		this.offset = offset;
-	}
-	
-	public PropagQueue getPropagQueue() { return variable.getPropagQueue(); }
-	
-	public Trail getTrail() { return variable.getTrail(); }
+  private final IntVar variable;
+  private final int offset;
 
-	public int getMin() { return variable.getMin() + offset; }
+  public IntVarOffset(IntVar variable, int offset) {
+    this.variable = variable;
+    this.offset = offset;
+  }
 
-	public int getMax() { return variable.getMax() + offset; }
+  @Override public PropagQueue getPropagQueue() {
+    return variable.getPropagQueue();
+  }
 
-	public int getSize() { return variable.getSize(); }
-	
-	public boolean isAssigned() { return variable.isAssigned(); }
-	
-	public boolean contains(int value) { return variable.contains(value - offset); }
+  @Override public Trail getTrail() {
+    return variable.getTrail();
+  }
 
-	public boolean assign(int value) { return variable.assign(value - offset); }
-	
-	public boolean remove(int value) { return variable.remove(value - offset); }
-	
-	public boolean updateMin(int value) { return variable.updateMin(value - offset); }
-	
-	public boolean updateMax(int value) { return variable.updateMax(value - offset); }
-	
-	public int copyDomain(int[] array) {
-		int size = variable.copyDomain(array);
-		for (int i = 0; i < size; i++) array[i] += offset;
-		return size;
-	}
-	
-	public void watchChange(Propagator propagator) { variable.watchChange(propagator); }
+  @Override public int getMin() {
+    return variable.getMin() + offset;
+  }
 
-	public void watchAssign(Propagator propagator) { variable.watchAssign(propagator); }
+  @Override public int getMax() {
+    return variable.getMax() + offset;
+  }
 
-	public void watchBounds(Propagator propagator) { variable.watchBounds(propagator); }
+  @Override public int getSize() {
+    return variable.getSize();
+  }
+
+  @Override public boolean isAssigned() {
+    return variable.isAssigned();
+  }
+
+  @Override public boolean contains(int value) {
+    return variable.contains(value - offset);
+  }
+
+  @Override public boolean assign(int value) {
+    return variable.assign(value - offset);
+  }
+
+  @Override public boolean remove(int value) {
+    return variable.remove(value - offset);
+  }
+
+  @Override public boolean updateMin(int value) {
+    return variable.updateMin(value - offset);
+  }
+
+  @Override public boolean updateMax(int value) {
+    return variable.updateMax(value - offset);
+  }
+
+  @Override public int copyDomain(int[] array) {
+    int size = variable.copyDomain(array);
+    for (int i = 0; i < size; i++)
+      array[i] += offset;
+    return size;
+  }
+
+  @Override public void watchChange(Propagator propagator) {
+    variable.watchChange(propagator);
+  }
+
+  @Override public void watchAssign(Propagator propagator) {
+    variable.watchAssign(propagator);
+  }
+
+  @Override public void watchBounds(Propagator propagator) {
+    variable.watchBounds(propagator);
+  }
 }

@@ -15,11 +15,25 @@
  */
 package kiwi.core;
 
+/**
+ * 
+ */
 public abstract class Propagator {
-	
-	protected boolean enqueued;
-	
-	public abstract boolean setup();
-	
-	public abstract boolean propagate();
+
+  /** Indicates if the propagator is contained in the propagation queue. */
+  protected boolean enqueued;
+
+  /**
+   * Initializes the propagator and performs its initial propagation
+   * 
+   * @return false if the propagation failed.
+   */
+  public abstract boolean setup();
+
+  /**
+   * Propagates the last domain changes
+   * 
+   * @return false if the propagation failed.
+   */
+  public abstract boolean propagate();
 }

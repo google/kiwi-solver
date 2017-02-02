@@ -21,46 +21,49 @@ import kiwi.variable.IntVar;
 
 public class AllDifferent extends Propagator {
 
-	private final IntVar[] unassigned;
-	private final TrailedInt nUnassignedT;
-	
-	public AllDifferent(IntVar[] variables) {
-		unassigned = variables.clone();
-		nUnassignedT = new TrailedInt(unassigned[0].getTrail(), variables.length);
-	}
-	
-	public boolean setup() {
-		if (!propagate()) return false;
-		for (int i = 0; i < unassigned.length; i++) unassigned[i].watchAssign(this);
-		return true;
-	}
-	
-	public boolean propagate() {
-		int nUnassigned = nUnassignedT.getValue();
-		if (nUnassigned == 1) return true;
-		boolean reduce = true;
-		while (reduce) {
-			reduce = false;
-			for (int i = nUnassigned - 1; i >= 0; i--) {
-				IntVar variable = unassigned[i];
-				if (variable.isAssigned()) {
-					//
-					nUnassigned--;
-					unassigned[i] = unassigned[nUnassigned];
-					unassigned[nUnassigned] = variable;
-					//
-					int value = variable.getMin();
-					for (int j = 0; j < nUnassigned; j++) {
-						IntVar var = unassigned[j];
-						if (var.contains(value)) {
-							if (!var.remove(value)) return false;
-							reduce |= var.isAssigned();
-						}
-					}
-				}
-			}
-		}
-		nUnassignedT.setValue(nUnassigned);
-		return true;
-	}
+  private final IntVar[] unassigned;
+  private final TrailedInt nUnassignedT;
+
+  public AllDifferent(IntVar[] variables) {
+    unassigned = variables.clone();
+    nUnassignedT = new TrailedInt(unassigned[0].getTrail(), variables.length);
+  }
+
+  public boolean setup() {
+    for (int i = 0; i < unassigned.length; i++) {
+      unassigned[i].watchAssign(this);
+    }
+    return propagate();
+  }
+
+  public boolean propagate() {
+    int nUnassigned = nUnassignedT.getValue();
+    if (nUnassigned == 1)
+      return true;
+    boolean reduce = true;
+    while (reduce) {
+      reduce = false;
+      for (int i = nUnassigned - 1; i >= 0; i--) {
+        IntVar variable = unassigned[i];
+        if (variable.isAssigned()) {
+          //
+          nUnassigned--;
+          unassigned[i] = unassigned[nUnassigned];
+          unassigned[nUnassigned] = variable;
+          //
+          int value = variable.getMin();
+          for (int j = 0; j < nUnassigned; j++) {
+            IntVar var = unassigned[j];
+            if (var.contains(value)) {
+              if (!var.remove(value))
+                return false;
+              reduce |= var.isAssigned();
+            }
+          }
+        }
+      }
+    }
+    nUnassignedT.setValue(nUnassigned);
+    return true;
+  }
 }

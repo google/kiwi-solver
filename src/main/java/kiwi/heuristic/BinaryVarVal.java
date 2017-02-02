@@ -25,52 +25,55 @@ import kiwi.util.Stack;
 import kiwi.variable.IntVar;
 
 public class BinaryVarVal implements Heuristic {
-	
-	private final IntVar[] variables;
-	
-	private final int[] unassigned;
-	private final TrailedInt nUnassignedT;
-	private final IntUnaryOperator varCost;
-	
-	public BinaryVarVal(IntVar[] variables, IntUnaryOperator varCost) {
-		this.variables = variables;
-		this.unassigned = Array.tabulate(variables.length, i -> i);
-		this.nUnassignedT = new TrailedInt(variables[0].getTrail(), variables.length);
-		this.varCost = varCost;
-	}
-	
-	public boolean pushDecisions(Stack<Decision> decisions) {
-		int varId = selectVar();
-		if (varId == -1) return true;
-		IntVar variable = variables[varId];
-		int value = variable.getMin();
-		decisions.push(() -> variable.remove(value));
-		decisions.push(() -> variable.assign(value));
-		return false;
-	}
 
-	private int selectVar() {
-		int minId = -1;
-		int minCost = Integer.MAX_VALUE;
-		int nUnassigned = nUnassignedT.getValue();
-		if (nUnassigned == 1) return unassigned[0];
-		for (int i = nUnassigned - 1; i >= 0; i--) {
-			int varId = unassigned[i];
-			if (variables[varId].isAssigned()) {
-				nUnassigned--;
-				unassigned[i] = unassigned[nUnassigned];
-				unassigned[nUnassigned] = varId;
-			} else {
-				int cost = varCost.applyAsInt(varId);
-				if (cost < minCost) {
-					minId = varId;
-					minCost = cost;
-				} else if (cost == minCost && varId < minId) {
-					minId = varId;
-				}
-			}
-		}
-		nUnassignedT.setValue(nUnassigned);
-		return minId;
-	}
+  private final IntVar[] variables;
+
+  private final int[] unassigned;
+  private final TrailedInt nUnassignedT;
+  private final IntUnaryOperator varCost;
+
+  public BinaryVarVal(IntVar[] variables, IntUnaryOperator varCost) {
+    this.variables = variables;
+    this.unassigned = Array.tabulate(variables.length, i -> i);
+    this.nUnassignedT = new TrailedInt(variables[0].getTrail(), variables.length);
+    this.varCost = varCost;
+  }
+
+  public boolean pushDecisions(Stack<Decision> decisions) {
+    int varId = selectVar();
+    if (varId == -1) {
+      return true;
+    }
+    IntVar variable = variables[varId];
+    int value = variable.getMin();
+    decisions.push(() -> variable.remove(value));
+    decisions.push(() -> variable.assign(value));
+    return false;
+  }
+
+  private int selectVar() {
+    int minId = -1;
+    int minCost = Integer.MAX_VALUE;
+    int nUnassigned = nUnassignedT.getValue();
+    if (nUnassigned == 1)
+      return unassigned[0];
+    for (int i = nUnassigned - 1; i >= 0; i--) {
+      int varId = unassigned[i];
+      if (variables[varId].isAssigned()) {
+        nUnassigned--;
+        unassigned[i] = unassigned[nUnassigned];
+        unassigned[nUnassigned] = varId;
+      } else {
+        int cost = varCost.applyAsInt(varId);
+        if (cost < minCost) {
+          minId = varId;
+          minCost = cost;
+        } else if (cost == minCost && varId < minId) {
+          minId = varId;
+        }
+      }
+    }
+    nUnassignedT.setValue(nUnassigned);
+    return minId;
+  }
 }

@@ -17,10 +17,26 @@ package kiwi.core;
 
 import kiwi.util.Stack;
 
+/**
+ * Superclass to be instantiated by any search heuristic.
+ */
 public interface Heuristic {
-	
-	// Return true if the heuristic if no additional decision needs to 
-	// be taken, we have a solution. Otherwise, return false and push the
-	// the next decisions to be taken on the decisions stack.
-	public boolean pushDecisions(Stack<Decision> decisions);
+
+  /**
+   * Pushes the next decisions to be taken on top of the decisions stack. 
+   * First check that the current state of the problem is a leaf. If not, it
+   * adds the next tree node to visit on top of decisions stack. The last pushed
+   * node will be the first to be explored.
+   * 
+   * Note that the behavior of the solver is not determined if the content of
+   * the is change.
+   * 
+   * @param decisions
+   *          The stack of decisions to be taken. The new decisions must be
+   *          pushed on top of the stack. The method should not remove any 
+   *          decision contained in the stack.
+   * 
+   * @return true if the decision stack is unchanged; false otherwise.
+   */
+  public boolean pushDecisions(Stack<Decision> decisions);
 }

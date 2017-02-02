@@ -19,63 +19,72 @@ import kiwi.util.Stack;
 
 public class DFSearch {
 
-	private final PropagQueue pQueue;
-	private final Trail trail;
+  private final PropagQueue pQueue;
+  private final Trail trail;
 
-	private final Stack<Decision> decisions = new Stack<>();
+  private final Stack<Decision> decisions = new Stack<>();
 
-	private int nFails;
-	private int nNodes;
-	
-	public DFSearch(PropagQueue pQueue, Trail trail) {
-		this.pQueue = pQueue;
-		this.trail = trail;
-	}
+  private int nFails;
+  private int nNodes;
 
-	public int getNodes() { return nNodes; }
+  public DFSearch(PropagQueue pQueue, Trail trail) {
+    this.pQueue = pQueue;
+    this.trail = trail;
+  }
 
-	public int getFails() { return nFails; }
+  /** Returns the number of explored nodes */
+  public int getNodes() {
+    return nNodes;
+  }
 
-	public void search(Heuristic heuristic) {
-		nNodes = 0;
-		nFails = 0;	
-		
-		// Perform root propagation.
-		if (!pQueue.propagate()) return;	
-		
-		// Check if the root is a solution. If not, it pushes
-		// the next decisions to try on the decisions stack.
-		if (heuristic.pushDecisions(decisions)) return;	
+  /** Returns the number of explored failed nodes */
+  public int getFails() {
+    return nFails;
+  }
 
-		// Save the root state.
-		trail.newLevel();
-		
-		// Start the search 
-		while (!decisions.isEmpty()) {
-			nNodes++;
-			
-			// Apply the next decision.
-			decisions.pop().apply();
-			
-			// Propagate
-			if (!pQueue.propagate()) {
-				trail.undoLevel();
-				nFails++;
-				continue;
-			} 
+  /** Starts the search */
+  public void search(Heuristic heuristic) {
+    nNodes = 0;
+    nFails = 0;
 
-			// Check if the node is a solution. If not, it pushes
-			// the next decisions to try on the decisions stack.
-			if (heuristic.pushDecisions(decisions)) {
-				trail.undoLevel();
-				break;
-			}
+    // Perform root propagation.
+    if (!pQueue.propagate())
+      return;
 
-			// Save the node state.
-			trail.newLevel();
-		}
-		
-		decisions.clear();
-		trail.undoAll();
-	}
+    // Check if the root is a solution. If it is not, push the next decisions to try on the 
+    // decisions stack.
+    if (heuristic.pushDecisions(decisions))
+      return;
+
+    // Save the root state.
+    trail.newLevel();
+
+    // Start the search.
+    while (!decisions.isEmpty()) {
+      nNodes++;
+
+      // Apply the next decision.
+      decisions.pop().apply();
+
+      // Propagate
+      if (!pQueue.propagate()) {
+        trail.undoLevel();
+        nFails++;
+        continue;
+      }
+
+      // Check if the node is a solution. If not, it pushes
+      // the next decisions to try on the decisions stack.
+      if (heuristic.pushDecisions(decisions)) {
+        trail.undoLevel();
+        break;
+      }
+
+      // Save the node state.
+      trail.newLevel();
+    }
+
+    decisions.clear();
+    trail.undoAll();
+  }
 }

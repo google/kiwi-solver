@@ -19,35 +19,111 @@ import kiwi.core.Propagator;
 import kiwi.core.PropagQueue;
 import kiwi.core.Trail;
 
+/** IntVar */
 public interface IntVar {
-	
-	public PropagQueue getPropagQueue();
-	
-	public Trail getTrail();
-	
-	public int getMin();
-	
-	public int getMax();
-	
-	public int getSize();
-	
-	public boolean isAssigned();
-	
-	public boolean contains(int value);
-	
-	public boolean assign(int value);
-	
-	public boolean remove(int value);
 
-	public boolean updateMin(int value);
-	
-	public boolean updateMax(int value);
+  /** 
+   * Returns the propagation associated to this variable.
+   * 
+   * @return
+   */
+  public PropagQueue getPropagQueue();
 
-	public void watchChange(Propagator propagator);
+  /** 
+   * Returns the trail associated to this variable. 
+   * 
+   * @return
+   */
+  public Trail getTrail();
 
-	public void watchAssign(Propagator propagator);
+  /** 
+   * Returns the minimum value contained in the variable's domain. 
+   * 
+   * @return
+   */
+  public int getMin();
 
-	public void watchBounds(Propagator propagator);
-	
-	public int copyDomain(int[] array);
+  /** 
+   * Returns the maximum value contained in the variable's domain. 
+   * 
+   * @return
+   */
+  public int getMax();
+
+  /** 
+   * Returns the numver of values contained in the variable's domain. 
+   * 
+   * @return
+   */
+  public int getSize();
+
+  /** 
+   * Returns true if the variable is assigned. 
+   * 
+   * @return
+   */
+  public boolean isAssigned();
+
+  /** 
+   * Returns true if value is contained in the variable's domain. 
+   * 
+   * @return
+   */
+  public boolean contains(int value);
+
+  /** 
+   * Assigns the variable to value. 
+   * 
+   * @return
+   */
+  public boolean assign(int value);
+
+  /** 
+   * Removes value from the variable's domain. 
+   * 
+   * @return
+   */
+  public boolean remove(int value);
+
+  /** 
+   * Removes all value lower than value. 
+   * 
+   * @return
+   */
+  public boolean updateMin(int value);
+
+  /** 
+   * Removes all value higher than value. 
+   * 
+   * @return
+   */
+  public boolean updateMax(int value);
+
+  /** 
+   * Registers the propagator on the domain changes. 
+   * 
+   * @return
+   */
+  public void watchChange(Propagator propagator);
+  
+  /** 
+   * Registers the propagator on domain assignations.
+   * 
+   * @return
+   */
+  public void watchAssign(Propagator propagator);
+
+  /** 
+   * Registers the propagator on bound changes. 
+   * 
+   * @return
+   */
+  public void watchBounds(Propagator propagator);
+
+  /** 
+   * Copies the values contained in the domain in array.
+   * 
+   * @return
+   */
+  public int copyDomain(int[] array);
 }

@@ -16,27 +16,37 @@
 package kiwi.util;
 
 public class StackInt {
+  
+  private int[] array = new int[16];
+  
+  private int index = 0;
 
-	private int[] array = new int[16];
-	private int index = 0;
-	
-	public int getSize() { return index; }
-	
-	public boolean isEmpty() { return index == 0; }
-	
-	public int top() { return array[index - 1]; }
-	
-	public void push(int elem) {
-		if (index == array.length) growStack();
-		array[index] = elem;
-		index++;
-	}
-	
-	public int pop() { return array[--index]; }
-	
-	private void growStack() {
-		int[] newArray = new int[index * 2];
-		System.arraycopy(array, 0, newArray, 0, index);
-		array = newArray;
-	}
+  public int getSize() {
+    return index;
+  }
+
+  public boolean isEmpty() {
+    return index == 0;
+  }
+
+  public int top() {
+    return array[index - 1];
+  }
+
+  public void push(int elem) {
+    if (index == array.length)
+      growStack();
+    array[index] = elem;
+    index++;
+  }
+
+  public int pop() {
+    return array[--index];
+  }
+
+  private void growStack() {
+    int[] newArray = new int[index * 2];
+    System.arraycopy(array, 0, newArray, 0, index);
+    array = newArray;
+  }
 }

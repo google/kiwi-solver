@@ -27,43 +27,43 @@ import kiwi.variable.IntVarOffset;
 
 public class NQueens {
 
-	public static void main(String[] args) {
-		
-		PropagQueue pQueue = new PropagQueue();
-		Trail trail = new Trail();
-		DFSearch search = new DFSearch(pQueue, trail);
-		
-		int n = 88;
+  public static void main(String[] args) {
 
-		IntVar[] queens = new IntVar[n];
-		IntVar[] queensUp = new IntVar[n];
-		IntVar[] queensDown = new IntVar[n];
-		
-		for (int i = 0; i < n; i++) {
-			queens[i] = new IntVarImpl(pQueue, trail, 0, n - 1);
-			queensUp[i] = new IntVarOffset(queens[i], i);
-			queensDown[i] = new IntVarOffset(queens[i], -i);
-		}
+    PropagQueue pQueue = new PropagQueue();
+    Trail trail = new Trail();
+    DFSearch search = new DFSearch(pQueue, trail);
 
-		AllDifferent allDiff1 = new AllDifferent(queens);
-		AllDifferent allDiff2 = new AllDifferent(queensUp);
-		AllDifferent allDiff3 = new AllDifferent(queensDown);
+    int n = 10;
 
-		allDiff1.setup();
-		allDiff2.setup();
-		allDiff3.setup();
+    IntVar[] queens = new IntVar[n];
+    IntVar[] queensUp = new IntVar[n];
+    IntVar[] queensDown = new IntVar[n];
 
-		pQueue.enqueue(allDiff1);
-		pQueue.enqueue(allDiff2);
-		pQueue.enqueue(allDiff3);
-		
-		Heuristic heuristic = new BinaryVarVal(queens, i -> queens[i].getSize());
-		
-		long t = System.currentTimeMillis();
-		search.search(heuristic);
-		long time = System.currentTimeMillis() - t;
+    for (int i = 0; i < n; i++) {
+      queens[i] = new IntVarImpl(pQueue, trail, 0, n - 1);
+      queensUp[i] = new IntVarOffset(queens[i], i);
+      queensDown[i] = new IntVarOffset(queens[i], -i);
+    }
 
-		System.out.println("time : " + time);
-		System.out.println("nodes: " + search.getNodes());
-	}
+    AllDifferent allDiff1 = new AllDifferent(queens);
+    AllDifferent allDiff2 = new AllDifferent(queensUp);
+    AllDifferent allDiff3 = new AllDifferent(queensDown);
+
+    allDiff1.setup();
+    allDiff2.setup();
+    allDiff3.setup();
+
+    pQueue.enqueue(allDiff1);
+    pQueue.enqueue(allDiff2);
+    pQueue.enqueue(allDiff3);
+
+    Heuristic heuristic = new BinaryVarVal(queens, i -> queens[i].getSize());
+
+    long t = System.currentTimeMillis();
+    search.search(heuristic);
+    long time = System.currentTimeMillis() - t;
+
+    System.out.println("time : " + time);
+    System.out.println("nodes: " + search.getNodes());
+  }
 }

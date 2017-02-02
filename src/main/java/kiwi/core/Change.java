@@ -15,6 +15,16 @@
  */
 package kiwi.core;
 
+/**
+ * Superclass to be instantiated by any trailed change.
+ * 
+ * <p>
+ * A {@code Change} represents any kind of undoable operation that affects the
+ * state of the solver, its variables, or its propagators. A {@code Change} is
+ * typically trailed and undone when a backtrack occurs.
+ * <p>
+ */
 public interface Change {
-	public void undo();
+  /** Undoes the change */
+  public void undo();
 }

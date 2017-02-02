@@ -18,34 +18,45 @@ package kiwi.core;
 import kiwi.util.Stack;
 import kiwi.util.StackInt;
 
+/** 
+ * {@code Trail} contains the chronological sequences of changes to undo. 
+ */
 public class Trail {
-	
-	private long timestamp = 0L;
-	
-	// Stack of changes.
-	private final Stack<Change> changes = new Stack<Change>();
-	private final StackInt levels = new StackInt();
 
-	public long getTimestamp() { return timestamp; }
-	
-	public void store(Change change) { changes.push(change); }
-	
-	public void newLevel() {
-		levels.push(changes.getSize());
-		timestamp++;
-	}
-	
-	public void undoLevel() {
-		if (levels.getSize() > 0) undoUntil(levels.pop());
-		timestamp++;
-	}
-	
-	public void undoAll() {
-		while (levels.getSize() > 0) undoUntil(levels.pop());
-		timestamp++;
-	}
-	
-	private void undoUntil(int size) {
-		while (changes.getSize() > size) changes.pop().undo();
-	}
+  private long timestamp = 0L;
+
+  private final Stack<Change> changes = new Stack<Change>();
+  private final StackInt levels = new StackInt();
+
+  public long getTimestamp() {
+    return timestamp;
+  }
+
+  public void store(Change change) {
+    changes.push(change);
+  }
+
+  public void newLevel() {
+    levels.push(changes.getSize());
+    timestamp++;
+  }
+
+  public void undoLevel() {
+    if (levels.getSize() > 0)
+      undoUntil(levels.pop());
+    timestamp++;
+  }
+
+  public void undoAll() {
+    while (levels.getSize() > 0) {
+      undoUntil(levels.pop());
+    }
+    timestamp++;
+  }
+
+  private void undoUntil(int size) {
+    while (changes.getSize() > size) {
+      changes.pop().undo();
+    }
+  }
 }

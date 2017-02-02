@@ -21,29 +21,33 @@ import kiwi.util.StackInt;
 
 public class TrailedInt implements Change {
 
-	private final Trail trail;
-	
-	private final StackInt oldValues = new StackInt();
-	
-	private int currentValue;
-	
-	private long timestamp = -1L;
-	
-	public TrailedInt(Trail trail, int initValue) { 
-		this.trail = trail;
-		currentValue = initValue; 
-	}
-	
-	public void undo() { currentValue = oldValues.pop(); }
-	
-	public int getValue() { return currentValue; }
-	
-	public void setValue(int value) { 
-		if (timestamp != trail.getTimestamp()) {
-			timestamp = trail.getTimestamp();
-			oldValues.push(currentValue);
-			trail.store(this);
-		}
-		currentValue = value;
-	}
+  private final Trail trail;
+
+  private final StackInt oldValues = new StackInt();
+
+  private int currentValue;
+
+  private long timestamp = -1L;
+
+  public TrailedInt(Trail trail, int initValue) {
+    this.trail = trail;
+    currentValue = initValue;
+  }
+
+  public void undo() {
+    currentValue = oldValues.pop();
+  }
+
+  public int getValue() {
+    return currentValue;
+  }
+
+  public void setValue(int value) {
+    if (timestamp != trail.getTimestamp()) {
+      timestamp = trail.getTimestamp();
+      oldValues.push(currentValue);
+      trail.store(this);
+    }
+    currentValue = value;
+  }
 }

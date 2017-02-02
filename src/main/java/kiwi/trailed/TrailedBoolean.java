@@ -18,25 +18,29 @@ package kiwi.trailed;
 import kiwi.core.Change;
 import kiwi.core.Trail;
 
-public class TrailedBoolean implements Change{
+public class TrailedBoolean implements Change {
 
-	private final Trail trail;
-		
-	private boolean currentValue;
-	
-	public TrailedBoolean(Trail trail, boolean initValue) { 
-		this.trail = trail;
-		currentValue = initValue; 
-	}
-	
-	public void undo() { currentValue = !currentValue; }
-	
-	public boolean getValue() { return currentValue; }
-	
-	public void setValue(boolean value) { 
-		if (currentValue != value) {
-			currentValue = value;
-			trail.store(this);
-		}
-	}
+  private final Trail trail;
+
+  private boolean currentValue;
+
+  public TrailedBoolean(Trail trail, boolean initValue) {
+    this.trail = trail;
+    currentValue = initValue;
+  }
+
+  public void undo() {
+    currentValue = !currentValue;
+  }
+
+  public boolean getValue() {
+    return currentValue;
+  }
+
+  public void setValue(boolean value) {
+    if (currentValue != value) {
+      currentValue = value;
+      trail.store(this);
+    }
+  }
 }

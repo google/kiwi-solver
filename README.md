@@ -1,7 +1,7 @@
 Kiwi-Solver
 -----------
 
-Kiwi is minimalist and extendable Constraint Programming (CP) solver specifically designed for education. 
+Kiwi is a minimalist and extendable Constraint Programming (CP) solver specifically designed for education. 
 
 The particularities of Kiwi stand in its generic trailing state restoration mechanism, its propagator-based propagation algorithm, and its modulable use of variables. 
 

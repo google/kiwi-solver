@@ -19,12 +19,17 @@ import java.util.ArrayDeque;
 
 /** PropagQueue */
 public class PropagQueue {
-
+  // The propagation queue that contains all the propagators waiting for
+  // propagation. All the contained propagator should have their enqueued
+  // boolean set to true.
   private final ArrayDeque<Propagator> queue = new ArrayDeque<Propagator>();
 
-  /** Enqueues the propagator for propagation if needed. 
+  /** 
+   * Enqueues the propagator for propagation if needed. 
    * 
-   *  Side effect: this method sets the inQueue boolean of propagator to true. 
+   * <p>
+   * Side effect: this method sets the enqueued boolean of propagator to true. 
+   * </p>
    */
   public void enqueue(Propagator propagator) {
     if (!propagator.enqueued) {
@@ -33,19 +38,33 @@ public class PropagQueue {
     }
   }
 
-  // Propagate all the propagator in the queue. Note that propagation is
-  // likely to enqueue additional propagator while it is running. The method
-  // return true if the propagation succeeded and false otherwise. The enqueued
-  // boolean of all the propagator in the queue is set to false no matter if
-  // the propagation succeeded or not.
+  /**
+   * Propagates the pending propagators.
+   * 
+   * <p>
+   * Propagate all the propagators contained in the propagation queue.
+   * Propagation is likely to enqueue additional propagators while it is
+   * running. The propagation stops either when the queue is empty, or if
+   * a propagator failed (meaning that the problem is infeasible).
+   * </p>
+   * 
+   * <p>
+   * The method returns true if the propagation succeded or false if a
+   * propagator failed. The queue is empty at the end of the propagation and all
+   * propagators contained in the queue have their enqueued boolean set to
+   * false.
+   * </p>
+   * 
+   * @return true if propagation succeeded, false otherwise.
+   */
   public boolean propagate() {
     boolean feasible = true;
     while (!queue.isEmpty()) {
       Propagator propagator = queue.removeFirst();
-      // Propagate only if unfailed.
+      // Propagate only if the problem is still feasible.
       feasible = feasible && propagator.propagate();
-      // Dequeue the propagator after propagation to prevent
-      // it from enqueuing itself.
+      // Dequeue the propagator after propagation to prevent it from enqueuing 
+      // itself.
       propagator.enqueued = false;
     }
     return feasible;

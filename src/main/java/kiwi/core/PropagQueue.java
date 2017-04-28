@@ -26,7 +26,6 @@ public class PropagQueue {
    * 
    *  Side effect: this method sets the inQueue boolean of propagator to true. 
    */
-  
   public void enqueue(Propagator propagator) {
     if (!propagator.enqueued) {
       queue.addLast(propagator);
@@ -40,15 +39,15 @@ public class PropagQueue {
   // boolean of all the propagator in the queue is set to false no matter if
   // the propagation succeeded or not.
   public boolean propagate() {
-    boolean unfailed = true;
-    while (!queue.isEmpty() && unfailed) {
+    boolean feasible = true;
+    while (!queue.isEmpty()) {
       Propagator propagator = queue.removeFirst();
       // Propagate only if unfailed.
-      unfailed = unfailed && propagator.propagate();
+      feasible = feasible && propagator.propagate();
       // Dequeue the propagator after propagation to prevent
       // it from enqueuing itself.
       propagator.enqueued = false;
     }
-    return unfailed;
+    return feasible;
   }
 }

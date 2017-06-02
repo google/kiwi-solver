@@ -17,6 +17,7 @@ package kiwi.search;
 
 import kiwi.propagation.PropagQueue;
 import kiwi.trail.Trail;
+import kiwi.util.Action;
 import kiwi.util.Stack;
 
 public class DFSearch {
@@ -25,9 +26,12 @@ public class DFSearch {
   private final Trail trail;
 
   private final Stack<Decision> decisions = new Stack<>();
+  private final Stack<Action> solutionActions = new Stack<>();
 
   private int nFails;
   private int nNodes;
+  
+  private Objective objective = null;
 
   public DFSearch(PropagQueue pQueue, Trail trail) {
     this.pQueue = pQueue;
@@ -43,6 +47,28 @@ public class DFSearch {
   public int getFails() {
     return nFails;
   }
+  
+  public void addSolutionAction(Action action) {
+    solutionActions.push(action);
+  }
+  
+  public void foundSolution() {
+    if (objective != null) {
+      objective.tighten();
+    }
+    solutionActions.forEach(action -> action.execute());
+  }
+  
+  public void setObjective(Objective obj) {
+    this.objective = obj;
+  }
+  
+  private boolean propagate() {
+    // Propagate the objective only if it is not null.
+    boolean feasible = objective == null || objective.propagate();
+    // Propagate the propagators only if the problem is still feasible.
+    return feasible && pQueue.propagate();
+  }
 
   /** Starts the search */
   public void search(Heuristic heuristic) {
@@ -50,13 +76,16 @@ public class DFSearch {
     nFails = 0;
 
     // Perform root propagation.
-    if (!pQueue.propagate())
+    if (!propagate()) {
       return;
+    }
 
-    // Check if the root is a solution. If it is not, push the next decisions to try on the 
-    // decisions stack.
-    if (heuristic.pushDecisions(decisions))
+    // Check if the root is a solution. 
+    // If it is not, push the next decisions to try on the decisions stack.
+    if (heuristic.pushDecisions(decisions)) {
+      foundSolution();
       return;
+    }
 
     // Save the root state.
     trail.newLevel();
@@ -65,11 +94,8 @@ public class DFSearch {
     while (!decisions.isEmpty()) {
       nNodes++;
 
-      // Apply the next decision.
-      decisions.pop().apply();
-
-      // Propagate
-      if (!pQueue.propagate()) {
+      // Apply the next decision and propagate.
+      if (!decisions.pop().apply() || !pQueue.propagate()) {
         trail.undoLevel();
         nFails++;
         continue;
@@ -78,8 +104,9 @@ public class DFSearch {
       // Check if the node is a solution. If not, it pushes
       // the next decisions to try on the decisions stack.
       if (heuristic.pushDecisions(decisions)) {
+        foundSolution();
         trail.undoLevel();
-        break;
+        continue;
       }
 
       // Save the node state.

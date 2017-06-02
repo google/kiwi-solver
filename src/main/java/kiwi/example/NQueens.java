@@ -57,7 +57,7 @@ public class NQueens {
     pQueue.enqueue(allDiff2);
     pQueue.enqueue(allDiff3);
 
-    Heuristic heuristic = new BinaryVarVal(queens, i -> queens[i].getSize());
+    Heuristic heuristic = new BinaryVarVal(queens, i -> queens[i].size());
 
     long t = System.currentTimeMillis();
     search.search(heuristic);

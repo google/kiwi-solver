@@ -51,7 +51,7 @@ public class AllDifferent extends Propagator {
           unassigned[i] = unassigned[nUnassigned];
           unassigned[nUnassigned] = variable;
           //
-          int value = variable.getMin();
+          int value = variable.min();
           for (int j = 0; j < nUnassigned; j++) {
             IntVar var = unassigned[j];
             if (var.contains(value)) {

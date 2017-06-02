@@ -59,8 +59,8 @@ public class Sum extends Propagator {
       // of the minimum and maximum values of all the variables.
       for (int i = nAssigned; i < assigned.length; i++) {
         IntVar term = assigned[i];
-        int min = term.getMin();
-        int max = term.getMax();
+        int min = term.min();
+        int max = term.max();
         sumTermsMin += min;
         sumTermsMax += max;
         int diff = max - min;
@@ -85,18 +85,18 @@ public class Sum extends Propagator {
 
       // Note that the domain of the sum variable can be smaller than
       // the range [sumTermsMin, sumTermsMax].
-      int sumMax = sum.getMax();
-      int sumMin = sum.getMin();
+      int sumMax = sum.max();
+      int sumMin = sum.min();
 
       if (sumTermsMax - maxDiff < sumMin) {
         for (int i = nAssigned; i < assigned.length; i++) {
           IntVar term = assigned[i];
-          int oldMin = term.getMin();
-          int newMin = sumMin - sumTermsMax + term.getMax();
+          int oldMin = term.min();
+          int newMin = sumMin - sumTermsMax + term.max();
           if (newMin > oldMin) {
             if (!term.updateMin(newMin))
               return false;
-            reduce |= newMin != term.getMin();
+            reduce |= newMin != term.min();
           }
         }
       }
@@ -104,12 +104,12 @@ public class Sum extends Propagator {
       if (sumTermsMin - maxDiff > sumMax) {
         for (int i = nAssigned; i < assigned.length; i++) {
           IntVar term = assigned[i];
-          int oldMax = term.getMax();
-          int newMax = sumMax - sumTermsMin + term.getMin();
+          int oldMax = term.max();
+          int newMax = sumMax - sumTermsMin + term.min();
           if (newMax < oldMax) {
             if (!term.updateMax(newMax))
               return false;
-            reduce |= newMax != term.getMax();
+            reduce |= newMax != term.max();
           }
         }
       }

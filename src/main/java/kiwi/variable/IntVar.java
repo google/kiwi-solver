@@ -15,115 +15,183 @@
  */
 package kiwi.variable;
 
+import java.util.Arrays;
+
 import kiwi.propagation.PropagQueue;
 import kiwi.propagation.Propagator;
 import kiwi.trail.Trail;
 
-/** IntVar */
-public interface IntVar {
+/**
+ * Superclass to be instantiated by any integer variable.
+ * 
+ * <p>
+ * An {@code IntVar} basically represents the set of integer values that can be assigned to the 
+ * variable. A variable is assigned when its domain becomes a singleton. The variable cannot be 
+ * empty. Operation that directly impact the domain of the variable must return false if the 
+ * operation would have lead to an empty domain. Once it failed, the state of the variable we don't
+ * what the state of the variable is until it is restored by backtraking.
+ * </p>
+ * 
+ * <p>
+ * An {@code IntVar} must be able to restore its state when a backtrack occurs. 
+ * </p>
+ */
+public abstract class IntVar {
+
+  public static final int MIN_VALUE = -1000000000;
+  
+  public static final int MAX_VALUE = 1000000000;
 
   /** 
-   * Returns the propagation associated to this variable.
+   * Returns the propagation queue associated to this variable.
    * 
    * @return
    */
-  public PropagQueue getPropagQueue();
+  public abstract PropagQueue getPropagQueue();
 
   /** 
    * Returns the trail associated to this variable. 
    * 
    * @return
    */
-  public Trail getTrail();
+  public abstract Trail getTrail();
 
   /** 
    * Returns the minimum value contained in the variable's domain. 
    * 
+   * <p>
+   * This operation is always performed in constant time.
+   * </p>
+   * 
    * @return
    */
-  public int getMin();
+  public abstract int min();
 
   /** 
    * Returns the maximum value contained in the variable's domain. 
    * 
+   * <p>
+   * This operation is always performed in constant time.
+   * </p>
+   * 
    * @return
    */
-  public int getMax();
+  public abstract int max();
 
   /** 
    * Returns the numver of values contained in the variable's domain. 
    * 
    * @return
    */
-  public int getSize();
+  public abstract int size();
 
   /** 
    * Returns true if the variable is assigned. 
    * 
+   * <p>
+   * This operation is always performed in constant time.
+   * </p>
+   * 
    * @return
    */
-  public boolean isAssigned();
+  public abstract boolean isAssigned();
 
   /** 
    * Returns true if value is contained in the variable's domain. 
    * 
+   * <p>
+   * This operation is always performed in constant time.
+   * </p>
+   * 
    * @return
    */
-  public boolean contains(int value);
+  public abstract boolean contains(int value);
 
   /** 
    * Assigns the variable to value. 
    * 
+   * <p>
+   * This operation enqueues all the propagator registered on this variable.
+   * This operation is linear in the number of propogator registered on the variable. 
+   * </p>
+   * 
    * @return
    */
-  public boolean assign(int value);
+  public abstract boolean assign(int value);
 
   /** 
    * Removes value from the variable's domain. 
    * 
    * @return
    */
-  public boolean remove(int value);
+  public abstract boolean remove(int value);
 
   /** 
    * Removes all value lower than value. 
    * 
    * @return
    */
-  public boolean updateMin(int value);
+  public abstract boolean updateMin(int value);
 
   /** 
    * Removes all value higher than value. 
+
+   * Constant time if fail.
+   * 
+   * Linear in the number of value contained between the current minimum and the new one.
    * 
    * @return
    */
-  public boolean updateMax(int value);
+  public abstract boolean updateMax(int value);
 
   /** 
    * Registers the propagator on the domain changes. 
    * 
+   * Constant time if fail.
+   * 
+   * Linear in the number of value contained between the current maximum and the new one.
+   * 
    * @return
    */
-  public void watchChange(Propagator propagator);
+  public abstract void watchChange(Propagator propagator);
   
   /** 
    * Registers the propagator on domain assignations.
    * 
+   * Constant time.
+   * 
    * @return
    */
-  public void watchAssign(Propagator propagator);
+  public abstract void watchAssign(Propagator propagator);
 
   /** 
    * Registers the propagator on bound changes. 
    * 
+   * Constant time.
+   * 
    * @return
    */
-  public void watchBounds(Propagator propagator);
+  public abstract void watchBounds(Propagator propagator);
 
   /** 
    * Copies the values contained in the domain in array.
    * 
+   * Constant time.
+   * 
    * @return
    */
-  public int copyDomain(int[] array);
+  public abstract int copyDomain(int[] array);
+  
+  @Override 
+  public String toString() {
+    int[] domain = new int[size()];
+    copyDomain(domain);
+    Arrays.sort(domain);
+    StringBuffer bf = new StringBuffer("{");
+    for (int i = 0; i < domain.length - 1; i++) {
+      bf.append(domain[i] + ", ");
+    }
+    bf.append(domain[domain.length - 1] + "}");
+    return bf.toString();
+  }
 }

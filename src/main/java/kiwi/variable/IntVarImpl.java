@@ -22,7 +22,21 @@ import kiwi.trail.TrailedInt;
 import kiwi.util.Array;
 import kiwi.util.Stack;
 
-public class IntVarImpl implements IntVar {
+/**
+ * A sparse set based implementation of IntVar
+ * 
+ * <p>
+ * This class implements {@code IntVar} with a sparse set representation. 
+ * 
+ * Reference: 
+ * - 
+ * - 
+ * </p>
+ * 
+ * 
+ * 
+ */
+public class IntVarImpl extends IntVar {
 
   private final PropagQueue pQueue;
   private final Trail trail;
@@ -50,8 +64,34 @@ public class IntVarImpl implements IntVar {
     this.maxT = new TrailedInt(trail, initMax);
     final int size = initMax - initMin + 1;
     this.sizeT = new TrailedInt(trail, size);
-    this.values = Array.tabulate(size, i -> i);
-    this.positions = values.clone();
+    this.values = Array.tabulate(size, i -> i + initMin);
+    this.positions = Array.tabulate(size, i -> i);
+  }
+  
+  public IntVarImpl(PropagQueue pQueue, Trail trail, int[] values) {
+    this.pQueue = pQueue;
+    this.trail = trail;
+    this.values = values.clone();
+    this.sizeT = new TrailedInt(trail, values.length);
+    
+    // Compute the minimum and maximum values in the domain.
+    int min = IntVar.MAX_VALUE;
+    int max = IntVar.MIN_VALUE;
+    for (int i = 0; i < values.length; i++) {
+      min = Math.min(min, values[i]);
+      max = Math.max(max, values[i]); 
+    }
+    this.initMin = min;
+    this.initMax = max;
+    this.minT = new TrailedInt(trail, initMin);
+    this.maxT = new TrailedInt(trail, initMax);
+    
+    // Build the domain representation.
+    final int range = max - min + 1;
+    this.positions = Array.tabulate(range, i -> range);
+    for (int i = 0; i < values.length; i++) {
+      this.positions[values[i] - initMin] = i;
+    }
   }
 
   @Override
@@ -65,17 +105,17 @@ public class IntVarImpl implements IntVar {
   };
 
   @Override
-  public int getMin() {
+  public int min() {
     return minT.getValue();
   }
 
   @Override
-  public int getMax() {
+  public int max() {
     return maxT.getValue();
   }
 
   @Override
-  public int getSize() {
+  public int size() {
     return sizeT.getValue();
   }
 
@@ -196,11 +236,11 @@ public class IntVarImpl implements IntVar {
   @Override
   public boolean updateMin(int value) {
     int max = maxT.getValue();
+    if (value == max) {
+      return assign(value);
+    }
     if (max < value) {
       return false;
-    }
-    if (value == max) {
-      return true;
     }
     int min = minT.getValue();
     if (value <= min) {
@@ -237,11 +277,11 @@ public class IntVarImpl implements IntVar {
   @Override
   public boolean updateMax(int value) {
     int min = minT.getValue();
+    if (value == min) {
+      return assign(value);
+    }
     if (min > value) {
       return false;
-    }
-    if (value == min) {
-      return true;
     }
     int max = maxT.getValue();
     if (value >= max) {

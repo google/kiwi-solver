@@ -20,14 +20,12 @@ import kiwi.propagation.Propagator;
 import kiwi.trail.Trail;
 
 /** */
-public class IntVarOffset extends IntVar {
+public class IntVarOpposite extends IntVar {
 
   private final IntVar variable;
-  private final int offset;
 
-  public IntVarOffset(IntVar variable, int offset) {
+  public IntVarOpposite(IntVar variable) {
     this.variable = variable;
-    this.offset = offset;
   }
 
   @Override public PropagQueue getPropagQueue() {
@@ -39,11 +37,11 @@ public class IntVarOffset extends IntVar {
   }
 
   @Override public int min() {
-    return variable.min() + offset;
+    return -variable.max();
   }
 
   @Override public int max() {
-    return variable.max() + offset;
+    return -variable.min();
   }
 
   @Override public int size() {
@@ -55,29 +53,30 @@ public class IntVarOffset extends IntVar {
   }
 
   @Override public boolean contains(int value) {
-    return variable.contains(value - offset);
+    return variable.contains(-value);
   }
 
   @Override public boolean assign(int value) {
-    return variable.assign(value - offset);
+    return variable.assign(-value);
   }
 
   @Override public boolean remove(int value) {
-    return variable.remove(value - offset);
+    return variable.remove(-value);
   }
 
   @Override public boolean updateMin(int value) {
-    return variable.updateMin(value - offset);
+    return variable.updateMax(-value);
   }
 
   @Override public boolean updateMax(int value) {
-    return variable.updateMax(value - offset);
+    return variable.updateMin(-value);
   }
 
   @Override public int copyDomain(int[] array) {
     int size = variable.copyDomain(array);
-    for (int i = 0; i < size; i++)
-      array[i] += offset;
+    for (int i = 0; i < size; i++) {
+      array[i] = -array[i];
+    }
     return size;
   }
 

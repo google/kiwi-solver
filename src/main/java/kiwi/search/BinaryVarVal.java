@@ -43,7 +43,7 @@ public class BinaryVarVal implements Heuristic {
       return true;
     }
     IntVar variable = variables[varId];
-    int value = variable.getMin();
+    int value = variable.min();
     decisions.push(() -> variable.remove(value));
     decisions.push(() -> variable.assign(value));
     return false;

@@ -16,12 +16,20 @@
 package kiwi.propagation;
 
 /**
- * 
+ * Superclass to be instantiated by any propagator.
  */
 public abstract class Propagator {
 
-  /** Indicates if the propagator is contained in the propagation queue. */
+  /** 
+   * Indicates if the propagator is contained in the propagation queue. 
+   */
   protected boolean enqueued;
+
+  /** 
+   * Indicates if the propagator might need to be called again just after 
+   * propagation. 
+   */  
+  protected boolean idempotent;
 
   /**
    * Initializes the propagator and performs its initial propagation

@@ -19,16 +19,17 @@ import java.util.ArrayDeque;
 
 /** PropagQueue */
 public class PropagQueue {
+  
   // The propagation queue that contains all the propagators waiting for
-  // propagation. All the contained propagator should have their enqueued
-  // boolean set to true.
+  // propagation. A propagator is considered to be enqueued only if its
+  // enqueued boolean is set to true.
   private final ArrayDeque<Propagator> queue = new ArrayDeque<Propagator>();
 
-  /** 
-   * Enqueues the propagator for propagation if needed. 
+  /**
+   * Enqueues the propagator for propagation.
    * 
    * <p>
-   * Side effect: this method sets the enqueued boolean of propagator to true. 
+   * This method does nothing if the propagator is already enqueued.
    * </p>
    */
   public void enqueue(Propagator propagator) {
@@ -44,12 +45,12 @@ public class PropagQueue {
    * <p>
    * Propagate all the propagators contained in the propagation queue.
    * Propagation is likely to enqueue additional propagators while it is
-   * running. The propagation stops either when the queue is empty, or if
-   * a propagator failed (meaning that the problem is infeasible).
+   * running. The propagation stops either when the queue is empty, or if a
+   * propagator failed (meaning that the problem is infeasible).
    * </p>
    * 
    * <p>
-   * The method returns true if the propagation succeded or false if a
+   * The method returns true if the propagation succeeded or false if a
    * propagator failed. The queue is empty at the end of the propagation and all
    * propagators contained in the queue have their enqueued boolean set to
    * false.
@@ -61,10 +62,13 @@ public class PropagQueue {
     boolean feasible = true;
     while (!queue.isEmpty()) {
       Propagator propagator = queue.removeFirst();
+      // Dequeue the propagator only if it is not idempotent. This allows the
+      // propagator to enqueue itself back in the propagation queue if it
+      // changed the domain of at least one of its variable.
+      propagator.enqueued = propagator.idempotent;
       // Propagate only if the problem is still feasible.
       feasible = feasible && propagator.propagate();
-      // Dequeue the propagator after propagation to prevent it from enqueuing 
-      // itself.
+      // Dequeue the propagator no matter what.
       propagator.enqueued = false;
     }
     return feasible;

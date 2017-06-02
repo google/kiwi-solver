@@ -15,7 +15,7 @@
  */
 package kiwi.example;
 
-import kiwi.constraints.AllDifferent;
+import kiwi.constraint.AllDifferent;
 import kiwi.propagation.PropagQueue;
 import kiwi.search.BinaryVarVal;
 import kiwi.search.DFSearch;

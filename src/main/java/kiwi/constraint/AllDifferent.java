@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package kiwi.constraints;
+package kiwi.constraint;
 
 import kiwi.propagation.Propagator;
 import kiwi.trail.TrailedInt;

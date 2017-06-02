@@ -15,24 +15,24 @@
  */
 package kiwi.variable;
 
-import kiwi.propagation.PropagQueue;
+import kiwi.propagation.PropagationQueue;
 import kiwi.propagation.Propagator;
 import kiwi.trail.Trail;
 
 public class IntVarSingleton extends IntVar {
 
-  private final PropagQueue pQueue;
+  private final PropagationQueue pQueue;
   private final Trail trail;
   private final int value;
 
-  public IntVarSingleton(PropagQueue pQueue, Trail trail, int value) {
+  public IntVarSingleton(PropagationQueue pQueue, Trail trail, int value) {
     this.pQueue = pQueue;
     this.trail = trail;
     this.value = value;
   }
 
   @Override
-  public PropagQueue getPropagQueue() {
+  public PropagationQueue getPropagQueue() {
     return pQueue;
   }
 

@@ -15,14 +15,14 @@
  */
 package kiwi.search;
 
-import kiwi.propagation.PropagQueue;
+import kiwi.propagation.PropagationQueue;
 import kiwi.trail.Trail;
 import kiwi.util.Action;
 import kiwi.util.Stack;
 
 public class DFSearch {
 
-  private final PropagQueue pQueue;
+  private final PropagationQueue pQueue;
   private final Trail trail;
 
   private final Stack<Decision> decisions = new Stack<>();
@@ -33,7 +33,7 @@ public class DFSearch {
   
   private Objective objective = null;
 
-  public DFSearch(PropagQueue pQueue, Trail trail) {
+  public DFSearch(PropagationQueue pQueue, Trail trail) {
     this.pQueue = pQueue;
     this.trail = trail;
   }

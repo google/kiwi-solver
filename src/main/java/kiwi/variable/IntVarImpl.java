@@ -15,7 +15,7 @@
  */
 package kiwi.variable;
 
-import kiwi.propagation.PropagQueue;
+import kiwi.propagation.PropagationQueue;
 import kiwi.propagation.Propagator;
 import kiwi.trail.Trail;
 import kiwi.trail.TrailedInt;
@@ -38,7 +38,7 @@ import kiwi.util.Stack;
  */
 public class IntVarImpl extends IntVar {
 
-  private final PropagQueue pQueue;
+  private final PropagationQueue pQueue;
   private final Trail trail;
 
   private final int initMin;
@@ -55,7 +55,7 @@ public class IntVarImpl extends IntVar {
   private final Stack<Propagator> assignWatchers = new Stack<Propagator>();
   private final Stack<Propagator> boundsWatchers = new Stack<Propagator>();
 
-  public IntVarImpl(PropagQueue pQueue, Trail trail, int initMin, int initMax) {
+  public IntVarImpl(PropagationQueue pQueue, Trail trail, int initMin, int initMax) {
     this.pQueue = pQueue;
     this.trail = trail;
     this.initMin = initMin;
@@ -68,7 +68,7 @@ public class IntVarImpl extends IntVar {
     this.positions = Array.tabulate(size, i -> i);
   }
   
-  public IntVarImpl(PropagQueue pQueue, Trail trail, int[] values) {
+  public IntVarImpl(PropagationQueue pQueue, Trail trail, int[] values) {
     this.pQueue = pQueue;
     this.trail = trail;
     this.values = values.clone();
@@ -95,7 +95,7 @@ public class IntVarImpl extends IntVar {
   }
 
   @Override
-  public PropagQueue getPropagQueue() {
+  public PropagationQueue getPropagQueue() {
     return pQueue;
   };
 

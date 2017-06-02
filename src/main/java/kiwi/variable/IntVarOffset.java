@@ -15,7 +15,7 @@
  */
 package kiwi.variable;
 
-import kiwi.propagation.PropagQueue;
+import kiwi.propagation.PropagationQueue;
 import kiwi.propagation.Propagator;
 import kiwi.trail.Trail;
 
@@ -30,7 +30,7 @@ public class IntVarOffset extends IntVar {
     this.offset = offset;
   }
 
-  @Override public PropagQueue getPropagQueue() {
+  @Override public PropagationQueue getPropagQueue() {
     return variable.getPropagQueue();
   }
 

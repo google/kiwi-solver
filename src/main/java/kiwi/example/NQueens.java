@@ -16,7 +16,7 @@
 package kiwi.example;
 
 import kiwi.constraint.AllDifferent;
-import kiwi.propagation.PropagQueue;
+import kiwi.propagation.PropagationQueue;
 import kiwi.search.BinaryVarVal;
 import kiwi.search.DFSearch;
 import kiwi.search.Heuristic;
@@ -29,7 +29,7 @@ public class NQueens {
 
   public static void main(String[] args) {
 
-    PropagQueue pQueue = new PropagQueue();
+    PropagationQueue pQueue = new PropagationQueue();
     Trail trail = new Trail();
     DFSearch search = new DFSearch(pQueue, trail);
 

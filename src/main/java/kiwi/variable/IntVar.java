@@ -17,7 +17,7 @@ package kiwi.variable;
 
 import java.util.Arrays;
 
-import kiwi.propagation.PropagQueue;
+import kiwi.propagation.PropagationQueue;
 import kiwi.propagation.Propagator;
 import kiwi.trail.Trail;
 
@@ -47,7 +47,7 @@ public abstract class IntVar {
    * 
    * @return
    */
-  public abstract PropagQueue getPropagQueue();
+  public abstract PropagationQueue getPropagQueue();
 
   /** 
    * Returns the trail associated to this variable. 

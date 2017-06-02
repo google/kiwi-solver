@@ -18,7 +18,7 @@ package kiwi.propagation;
 import java.util.ArrayDeque;
 
 /** PropagQueue */
-public class PropagQueue {
+public class PropagationQueue {
   
   // The propagation queue that contains all the propagators waiting for
   // propagation. A propagator is considered to be enqueued only if its

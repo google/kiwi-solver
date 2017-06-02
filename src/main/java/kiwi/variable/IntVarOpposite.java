@@ -15,7 +15,7 @@
  */
 package kiwi.variable;
 
-import kiwi.propagation.PropagQueue;
+import kiwi.propagation.PropagationQueue;
 import kiwi.propagation.Propagator;
 import kiwi.trail.Trail;
 
@@ -28,7 +28,7 @@ public class IntVarOpposite extends IntVar {
     this.variable = variable;
   }
 
-  @Override public PropagQueue getPropagQueue() {
+  @Override public PropagationQueue getPropagQueue() {
     return variable.getPropagQueue();
   }
 

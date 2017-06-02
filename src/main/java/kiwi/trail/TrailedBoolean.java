@@ -13,18 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package kiwi.core;
+package kiwi.trail;
 
-/**
- * Superclass to be instantiated by any trailed change.
- * 
- * <p>
- * A {@code Change} represents any kind of undoable operation that affects the
- * state of the solver, its variables, or its propagators. A {@code Change} is
- * typically trailed and undone when a backtrack occurs.
- * <p>
- */
-public interface Change {
-  /** Undoes the change */
-  public void undo();
+
+public class TrailedBoolean implements Change {
+
+  private final Trail trail;
+
+  private boolean currentValue;
+
+  public TrailedBoolean(Trail trail, boolean initValue) {
+    this.trail = trail;
+    currentValue = initValue;
+  }
+
+  public void undo() {
+    currentValue = !currentValue;
+  }
+
+  public boolean getValue() {
+    return currentValue;
+  }
+
+  public void setValue(boolean value) {
+    if (currentValue != value) {
+      currentValue = value;
+      trail.store(this);
+    }
+  }
 }

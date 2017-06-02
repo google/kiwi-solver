@@ -13,13 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package kiwi.heuristic;
+package kiwi.search;
 
 import java.util.function.IntUnaryOperator;
 
-import kiwi.core.Decision;
-import kiwi.core.Heuristic;
-import kiwi.trailed.TrailedInt;
+import kiwi.trail.TrailedInt;
 import kiwi.util.Array;
 import kiwi.util.Stack;
 import kiwi.variable.IntVar;

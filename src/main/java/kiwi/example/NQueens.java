@@ -15,12 +15,12 @@
  */
 package kiwi.example;
 
-import kiwi.core.DFSearch;
-import kiwi.core.Heuristic;
-import kiwi.core.PropagQueue;
-import kiwi.core.Trail;
-import kiwi.heuristic.BinaryVarVal;
-import kiwi.propagator.AllDifferent;
+import kiwi.constraints.AllDifferent;
+import kiwi.propagation.PropagQueue;
+import kiwi.search.BinaryVarVal;
+import kiwi.search.DFSearch;
+import kiwi.search.Heuristic;
+import kiwi.trail.Trail;
 import kiwi.variable.IntVar;
 import kiwi.variable.IntVarImpl;
 import kiwi.variable.IntVarOffset;

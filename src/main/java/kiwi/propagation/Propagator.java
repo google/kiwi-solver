@@ -13,34 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package kiwi.trailed;
+package kiwi.propagation;
 
-import kiwi.core.Change;
-import kiwi.core.Trail;
+/**
+ * 
+ */
+public abstract class Propagator {
 
-public class TrailedBoolean implements Change {
+  /** Indicates if the propagator is contained in the propagation queue. */
+  protected boolean enqueued;
 
-  private final Trail trail;
+  /**
+   * Initializes the propagator and performs its initial propagation
+   * 
+   * @return false if the propagation failed.
+   */
+  public abstract boolean setup();
 
-  private boolean currentValue;
-
-  public TrailedBoolean(Trail trail, boolean initValue) {
-    this.trail = trail;
-    currentValue = initValue;
-  }
-
-  public void undo() {
-    currentValue = !currentValue;
-  }
-
-  public boolean getValue() {
-    return currentValue;
-  }
-
-  public void setValue(boolean value) {
-    if (currentValue != value) {
-      currentValue = value;
-      trail.store(this);
-    }
-  }
+  /**
+   * Propagates the last domain changes
+   * 
+   * @return false if the propagation failed.
+   */
+  public abstract boolean propagate();
 }

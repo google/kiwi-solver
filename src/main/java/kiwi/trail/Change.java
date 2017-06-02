@@ -13,18 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package kiwi.core;
+package kiwi.trail;
 
 /**
- * Superclass to be instantiated by any search decision.
+ * Superclass to be instantiated by any trailed change.
  * 
  * <p>
- * A {@code Decision} is taken by the search heuristic to drive the tree search
- * on specific direction. A {@code Decision} typically impacts directly impact
- * the domain of an {@code IntVar} by removing some values of its domain.
- * </p>
+ * A {@code Change} represents any kind of undoable operation that affects the
+ * state of the solver, its variables, or its propagators. A {@code Change} is
+ * typically trailed and undone when a backtrack occurs.
+ * <p>
  */
-public interface Decision {
-  /** Applies the decision. */
-  public boolean apply();
+public interface Change {
+  /** Undoes the change */
+  public void undo();
 }

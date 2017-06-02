@@ -13,10 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package kiwi.trailed;
+package kiwi.trail;
 
-import kiwi.core.Change;
-import kiwi.core.Trail;
 import kiwi.util.StackInt;
 
 public class TrailedInt implements Change {

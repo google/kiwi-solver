@@ -15,9 +15,9 @@
  */
 package kiwi.variable;
 
-import kiwi.core.PropagQueue;
-import kiwi.core.Propagator;
-import kiwi.core.Trail;
+import kiwi.propagation.PropagQueue;
+import kiwi.propagation.Propagator;
+import kiwi.trail.Trail;
 
 /** */
 public class IntVarOffset implements IntVar {

@@ -15,10 +15,10 @@
  */
 package kiwi.variable;
 
-import kiwi.core.PropagQueue;
-import kiwi.core.Propagator;
-import kiwi.core.Trail;
-import kiwi.trailed.TrailedInt;
+import kiwi.propagation.PropagQueue;
+import kiwi.propagation.Propagator;
+import kiwi.trail.Trail;
+import kiwi.trail.TrailedInt;
 import kiwi.util.Array;
 import kiwi.util.Stack;
 

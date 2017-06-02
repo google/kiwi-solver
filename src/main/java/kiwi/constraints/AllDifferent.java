@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package kiwi.propagator;
+package kiwi.constraints;
 
-import kiwi.core.Propagator;
-import kiwi.trailed.TrailedInt;
+import kiwi.propagation.Propagator;
+import kiwi.trail.TrailedInt;
 import kiwi.variable.IntVar;
 
 public class AllDifferent extends Propagator {

@@ -13,27 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package kiwi.core;
+package kiwi.search;
 
 /**
+ * Superclass to be instantiated by any search decision.
  * 
+ * <p>
+ * A {@code Decision} is taken by the search heuristic to drive the tree search
+ * on specific direction. A {@code Decision} typically impacts directly impact
+ * the domain of an {@code IntVar} by removing some values of its domain.
+ * </p>
  */
-public abstract class Propagator {
-
-  /** Indicates if the propagator is contained in the propagation queue. */
-  protected boolean enqueued;
-
-  /**
-   * Initializes the propagator and performs its initial propagation
-   * 
-   * @return false if the propagation failed.
-   */
-  public abstract boolean setup();
-
-  /**
-   * Propagates the last domain changes
-   * 
-   * @return false if the propagation failed.
-   */
-  public abstract boolean propagate();
+public interface Decision {
+  /** Applies the decision. */
+  public boolean apply();
 }

@@ -18,7 +18,6 @@ package kiwi.example;
 import java.util.Arrays;
 
 import kiwi.Solver;
-import kiwi.search.BinaryVarVal;
 import kiwi.variable.IntVar;
 
 public class NQueens {

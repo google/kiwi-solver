@@ -25,11 +25,11 @@ public interface Heuristic {
   /**
    * Pushes the next decisions to be taken on top of the decisions stack. 
    * First check that the current state of the problem is a leaf. If not, it
-   * adds the next tree node to visit on top of decisions stack. The last pushed
-   * node will be the first to be explored.
+   * adds the next decisions to applyon top of decisions stack. The last pushed
+   * decision will be the first to be applied.
    * 
    * Note that the behavior of the solver is not determined if the content of
-   * the is change.
+   * the decisions stack is changed.
    * 
    * @param decisions
    *          The stack of decisions to be taken. The new decisions must be

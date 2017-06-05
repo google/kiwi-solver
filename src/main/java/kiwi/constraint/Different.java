@@ -13,18 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package kiwi.search;
+package kiwi.constraint;
 
-/**
- * Superclass to be instantiated by any search decision.
- * 
- * <p>
- * A {@code Decision} is taken by the search heuristic to drive the tree search
- * on specific directions. A {@code Decision} typically impacts directly the 
- * domain of an {@code IntVar} by removing values from its domain.
- * </p>
- */
-public interface Decision {
-  /** Applies the decision. */
-  public boolean apply();
+import kiwi.propagation.Propagator;
+import kiwi.variable.IntVar;
+
+public class Different extends Propagator {
+
+  private final IntVar x;
+  private final IntVar y;
+
+  public Different(IntVar x, IntVar y) {
+    this.idempotent = true;
+    this.x = x;
+    this.y = y;
+  }
+  
+  public boolean setup() {
+    x.watchAssign(this);
+    y.watchAssign(this);
+    return propagate();
+  }
+  
+  public boolean propagate() {
+    if (x.isAssigned()) {
+      return y.remove(x.min());
+    } 
+    if (y.isAssigned()) {
+      return x.remove(y.min());
+    }
+    return false;
+  }
 }

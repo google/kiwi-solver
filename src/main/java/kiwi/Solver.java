@@ -3,6 +3,7 @@ package kiwi;
 import java.util.function.IntUnaryOperator;
 
 import kiwi.constraint.AllDifferent;
+import kiwi.constraint.Different;
 import kiwi.constraint.LowerEqual;
 import kiwi.constraint.Sum;
 import kiwi.propagation.PropagationQueue;
@@ -139,6 +140,10 @@ public class Solver {
   public boolean different(IntVar x, int k) {
     feasible &= x.remove(k);
     return feasible;
+  }
+  
+  public boolean different(IntVar x, IntVar y) {
+    return add(new Different(x, y));
   }
 
   public boolean allDifferent(IntVar[] variables) {

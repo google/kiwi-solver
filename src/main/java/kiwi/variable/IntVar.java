@@ -25,11 +25,11 @@ import kiwi.trail.Trail;
  * Superclass to be instantiated by any integer variable.
  * 
  * <p>
- * An {@code IntVar} basically represents the set of integer values that can be assigned to the 
- * variable. A variable is assigned when its domain becomes a singleton. The variable cannot be 
- * empty. Operation that directly impact the domain of the variable must return false if the 
- * operation would have lead to an empty domain. Once it failed, the state of the variable we don't
- * what the state of the variable is until it is restored by backtraking.
+ * An {@code IntVar} basically represents the set of integer values that can be
+ * assigned to the variable. A variable is assigned when its domain becomes a 
+ * singleton, i.e, it contains a single value. The variable cannot be empty. 
+ * Operation that directly impact the domain of the variable must return false 
+ * if the operation would have lead to an empty domain. 
  * </p>
  * 
  * <p>

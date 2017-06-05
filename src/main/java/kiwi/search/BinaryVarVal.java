@@ -29,12 +29,14 @@ public class BinaryVarVal implements Heuristic {
   private final int[] unassigned;
   private final TrailedInt nUnassignedT;
   private final IntUnaryOperator varCost;
+  private final IntUnaryOperator valSelector;
 
-  public BinaryVarVal(IntVar[] variables, IntUnaryOperator varCost) {
+  public BinaryVarVal(IntVar[] variables, IntUnaryOperator varCost, IntUnaryOperator valSelector) {
     this.variables = variables;
     this.unassigned = Array.tabulate(variables.length, i -> i);
     this.nUnassignedT = new TrailedInt(variables[0].getTrail(), variables.length);
     this.varCost = varCost;
+    this.valSelector = valSelector;
   }
 
   public boolean pushDecisions(Stack<Decision> decisions) {
@@ -43,7 +45,7 @@ public class BinaryVarVal implements Heuristic {
       return true;
     }
     IntVar variable = variables[varId];
-    int value = variable.min();
+    int value = valSelector.applyAsInt(varId);
     decisions.push(() -> variable.remove(value));
     decisions.push(() -> variable.assign(value));
     return false;

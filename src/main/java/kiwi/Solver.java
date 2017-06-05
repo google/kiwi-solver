@@ -1,10 +1,13 @@
 package kiwi;
 
+import java.util.function.IntUnaryOperator;
+
 import kiwi.constraint.AllDifferent;
 import kiwi.constraint.LowerEqual;
 import kiwi.constraint.Sum;
 import kiwi.propagation.PropagationQueue;
 import kiwi.propagation.Propagator;
+import kiwi.search.BinaryVarVal;
 import kiwi.search.DFSearch;
 import kiwi.search.Heuristic;
 import kiwi.search.Objective;
@@ -21,7 +24,7 @@ public class Solver {
   private final Trail trail;
   private final PropagationQueue pQueue;
   private final DFSearch search;
-  
+
   private boolean feasible = true;
 
   private Heuristic heuristic = null;
@@ -32,7 +35,7 @@ public class Solver {
     this.search = new DFSearch(pQueue, trail);
     this.feasible = true;
   }
-  
+
   public Trail trail() {
     return trail;
   }
@@ -40,7 +43,7 @@ public class Solver {
   public void setHeuristic(Heuristic heuristic) {
     this.heuristic = heuristic;
   }
-  
+
   public void setObjective(Objective obj) {
     this.search.setObjective(obj);
   }
@@ -55,7 +58,7 @@ public class Solver {
     }
     search.search(heuristic);
   }
-  
+
   public boolean isFeasible() {
     return feasible;
   }
@@ -63,15 +66,15 @@ public class Solver {
   public IntVar intVar(int min, int max) {
     return new IntVarImpl(pQueue, trail, min, max);
   }
-  
+
   public IntVar intVar(int value) {
     return new IntVarSingleton(pQueue, trail, value);
   }
-  
+
   public IntVar intVar(int[] values) {
     return new IntVarImpl(pQueue, trail, values);
   }
-  
+
   public IntVar opposite(IntVar x) {
     return new IntVarOpposite(x);
   }
@@ -132,7 +135,7 @@ public class Solver {
     feasible &= x.assign(k);
     return feasible;
   }
-  
+
   public boolean different(IntVar x, int k) {
     feasible &= x.remove(k);
     return feasible;
@@ -145,7 +148,7 @@ public class Solver {
   public IntVar offset(IntVar x, int k) {
     return new IntVarOffset(x, k);
   }
-  
+
   public IntVar sum(IntVar[] variables, int k) {
     int min = k;
     int max = k;
@@ -155,11 +158,19 @@ public class Solver {
       max += variables[i].max();
     }
     final IntVar result = intVar(min, max);
-    sum(variables, result, k);  // should always return true
+    sum(variables, result, k); // should always return true
     return result;
   }
 
   public boolean sum(IntVar[] variables, IntVar sum, int k) {
     return add(new Sum(variables, sum, k));
+  }
+
+  public void useBinaryFirstFail(IntVar[] vars) {
+    setHeuristic(new BinaryVarVal(vars, i -> vars[i].size(), i -> vars[i].min()));
+  }
+
+  public void useBinary(IntVar[] vars, IntUnaryOperator varCost, IntUnaryOperator valSelector) {
+    setHeuristic(new BinaryVarVal(vars, varCost, valSelector));
   }
 }

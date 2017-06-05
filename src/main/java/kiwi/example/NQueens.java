@@ -15,6 +15,8 @@
  */
 package kiwi.example;
 
+import java.util.Arrays;
+
 import kiwi.Solver;
 import kiwi.search.BinaryVarVal;
 import kiwi.variable.IntVar;
@@ -40,14 +42,10 @@ public class NQueens {
     solver.allDifferent(queensUp);
     solver.allDifferent(queensDown);
 
-    solver.setHeuristic(new BinaryVarVal(queens, i -> queens[i].size()));
+    solver.useBinaryFirstFail(queens);
 
     solver.onSolution(() -> {
-      System.out.println("Solution: ");
-      for (IntVar q: queens) {
-        System.out.print(q);
-      }
-      System.out.println();
+      System.out.println("Solution: " + Arrays.toString(queens));
     });
     
     solver.solve();

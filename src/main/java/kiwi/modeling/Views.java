@@ -9,10 +9,10 @@ import kiwi.variable.IntVarOpposite;
 
 public class Views {
 
-  // Contains all the opposite views.
+  // Contain all the opposite views.
   private static HashMap<IntVar, IntVar> oppositeViews = new HashMap<>();
   
-  // Contains all the offset views.
+  // Contain all the offset views.
   private static HashMap<Tuple<IntVar, Integer>, IntVar> offsetViews = new HashMap<>();
   
   public static IntVar opposite(IntVar x) {

@@ -18,12 +18,12 @@ package kiwi.constraint;
 import kiwi.propagation.Propagator;
 import kiwi.variable.IntVar;
 
-public class Different extends Propagator {
+public class DifferentVar extends Propagator {
 
   private final IntVar x;
   private final IntVar y;
 
-  public Different(IntVar x, IntVar y) {
+  public DifferentVar(IntVar x, IntVar y) {
     this.idempotent = true;
     this.x = x;
     this.y = y;

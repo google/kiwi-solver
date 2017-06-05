@@ -65,15 +65,8 @@ public class Solver {
     return new IntVarImpl(pQueue, trail, values);
   }
 
-  public boolean add(Propagator p) {
-    if (!feasible) {
-      return false;
-    }
-    feasible &= p.setup();
-    feasible &= pQueue.propagate();
-    if (!feasible) {
-      System.err.println("UNFEASIBLE");
-    }
+  public boolean add(Propagator propagator) {
+    feasible = feasible && propagator.setup() && pQueue.propagate();
     return feasible;
   }
 }

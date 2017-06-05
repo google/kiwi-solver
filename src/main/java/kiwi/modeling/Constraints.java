@@ -2,6 +2,8 @@ package kiwi.modeling;
 
 import kiwi.Solver;
 import kiwi.constraint.AllDifferent;
+import kiwi.constraint.DifferentVal;
+import kiwi.constraint.DifferentVar;
 import kiwi.constraint.LowerEqualVal;
 import kiwi.constraint.LowerEqualVar;
 import kiwi.constraint.Sum;
@@ -41,7 +43,14 @@ public class Constraints {
   public static Propagator greater(IntVar x, int k) {
     return new LowerEqualVal(Views.opposite(x), -k, true);
   }
+  
+  public static Propagator different(IntVar x, IntVar y) {
+    return new DifferentVar(x, y);
+  }
 
+  public static Propagator different(IntVar x, int k) {
+    return new DifferentVal(x, k);
+  }
 
   public static Propagator allDifferent(IntVar[] variables) {
     return new AllDifferent(variables);

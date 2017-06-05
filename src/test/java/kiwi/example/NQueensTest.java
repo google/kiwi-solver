@@ -59,9 +59,6 @@ public class NQueensTest {
     solver.add(Constraints.allDifferent(queens));
     solver.add(Constraints.allDifferent(queensUp));
     solver.add(Constraints.allDifferent(queensDown));
-    int[] nSols = new int[1];
-    solver.onSolution(() -> nSols[0]++);
-    solver.solve(Heuristics.binaryFirstFail(queens));
-    return nSols[0];
+    return solver.solve(Heuristics.binaryFirstFail(queens)).nSolutions;
   }
 }

@@ -17,18 +17,19 @@ package kiwi.variables;
 
 import kiwi.Solver;
 import kiwi.variable.IntVar;
+import kiwi.variable.IntVarOpposite;
 
 public class IntVarOppositeTest extends IntVarTest {
 
   @Override
   public IntVar intVar(Solver solver, int min, int max) {
     IntVar x = solver.intVar(min, max);
-    return solver.opposite(solver.opposite(x));
+    return new IntVarOpposite(new IntVarOpposite(x));
   }
   
   @Override
   public IntVar intVar(Solver solver, int[] values) {
     IntVar x = solver.intVar(values);
-    return solver.opposite(solver.opposite(x));
+    return new IntVarOpposite(new IntVarOpposite(x));
   }
 }

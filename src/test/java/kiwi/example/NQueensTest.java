@@ -15,11 +15,14 @@
  */
 package kiwi.example;
 
+import static org.junit.Assert.assertEquals;
 import kiwi.Solver;
+import kiwi.modeling.Constraints;
+import kiwi.modeling.Heuristics;
+import kiwi.modeling.Views;
 import kiwi.variable.IntVar;
 
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 
 public class NQueensTest {
   
@@ -50,16 +53,15 @@ public class NQueensTest {
     IntVar[] queensDown = new IntVar[n];
     for (int i = 0; i < n; i++) {
       queens[i] = solver.intVar(0, n - 1);
-      queensUp[i] = solver.offset(queens[i], i);
-      queensDown[i] = solver.offset(queens[i], -i);
+      queensUp[i] = Views.offset(queens[i], i);
+      queensDown[i] = Views.offset(queens[i], -i);
     }
-    solver.allDifferent(queens);
-    solver.allDifferent(queensUp);
-    solver.allDifferent(queensDown);  
-    solver.useBinaryFirstFail(queens);
+    solver.add(Constraints.allDifferent(queens));
+    solver.add(Constraints.allDifferent(queensUp));
+    solver.add(Constraints.allDifferent(queensDown));
     int[] nSols = new int[1];
     solver.onSolution(() -> nSols[0]++);
-    solver.solve();
+    solver.solve(Heuristics.binaryFirstFail(queens));
     return nSols[0];
   }
 }

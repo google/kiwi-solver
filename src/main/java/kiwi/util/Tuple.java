@@ -13,23 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package kiwi.variables;
+package kiwi.util;
 
-import kiwi.Solver;
-import kiwi.variable.IntVar;
-import kiwi.variable.IntVarOffset;
-
-public class IntVarOffsetTest extends IntVarTest {
-
-  @Override
-  public IntVar intVar(Solver solver, int min, int max) {
-    IntVar x = solver.intVar(min, max);
-    return new IntVarOffset(new IntVarOffset(new IntVarOffset(x, -10), 12), -2);
-  }
-  
-  @Override
-  public IntVar intVar(Solver solver, int[] values) {
-    IntVar x = solver.intVar(values);
-    return new IntVarOffset(new IntVarOffset(new IntVarOffset(x, -10), 12), -2);
-  }
-}
+public class Tuple<X, Y> { 
+  public final X x; 
+  public final Y y; 
+  public Tuple(X x, Y y) { 
+    this.x = x; 
+    this.y = y; 
+  } 
+} 

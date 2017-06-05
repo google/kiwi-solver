@@ -64,8 +64,8 @@ public class IntVarImpl extends IntVar {
     this.maxT = new TrailedInt(trail, initMax);
     final int size = initMax - initMin + 1;
     this.sizeT = new TrailedInt(trail, size);
-    this.values = Array.tabulate(size, i -> i + initMin);
-    this.positions = Array.tabulate(size, i -> i);
+    this.values = Array.makeInt(size, i -> i + initMin);
+    this.positions = Array.makeInt(size, i -> i);
   }
   
   public IntVarImpl(PropagationQueue pQueue, Trail trail, int[] values) {
@@ -88,7 +88,7 @@ public class IntVarImpl extends IntVar {
     
     // Build the domain representation.
     final int range = max - min + 1;
-    this.positions = Array.tabulate(range, i -> range);
+    this.positions = Array.makeInt(range, i -> range);
     for (int i = 0; i < values.length; i++) {
       this.positions[values[i] - initMin] = i;
     }

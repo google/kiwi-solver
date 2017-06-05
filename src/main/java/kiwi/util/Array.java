@@ -18,7 +18,7 @@ package kiwi.util;
 import java.util.function.IntUnaryOperator;
 
 public class Array {
-  public static int[] tabulate(int n, IntUnaryOperator f) {
+  public static int[] makeInt(int n, IntUnaryOperator f) {
     int[] array = new int[n];
     for (int i = 0; i < n; i++) {
       array[i] = f.applyAsInt(i);

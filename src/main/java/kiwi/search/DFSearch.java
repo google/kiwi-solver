@@ -15,6 +15,8 @@
  */
 package kiwi.search;
 
+import java.util.function.Predicate;
+
 import kiwi.propagation.PropagationQueue;
 import kiwi.trail.Trail;
 import kiwi.util.Action;
@@ -27,9 +29,6 @@ public class DFSearch {
 
   private final Stack<Decision> decisions = new Stack<>();
   private final Stack<Action> solutionActions = new Stack<>();
-
-  private int nFails;
-  private int nNodes;
   
   private Objective objective = null;
 
@@ -37,26 +36,17 @@ public class DFSearch {
     this.pQueue = pQueue;
     this.trail = trail;
   }
-
-  /** Returns the number of explored nodes */
-  public int getNodes() {
-    return nNodes;
-  }
-
-  /** Returns the number of explored failed nodes */
-  public int getFails() {
-    return nFails;
-  }
   
   public void addSolutionAction(Action action) {
     solutionActions.push(action);
   }
   
-  public void foundSolution() {
+  public void foundSolution(SearchStats stats) {
+    stats.nSolutions++;
+    solutionActions.forEach(action -> action.execute());
     if (objective != null) {
       objective.tighten();
     }
-    solutionActions.forEach(action -> action.execute());
   }
   
   public void setObjective(Objective obj) {
@@ -71,40 +61,39 @@ public class DFSearch {
   }
 
   /** Starts the search */
-  public void search(Heuristic heuristic) {
-    nNodes = 0;
-    nFails = 0;
+  public SearchStats search(Heuristic heuristic, Predicate<SearchStats> stopCondition) {
+    SearchStats stats = new SearchStats();
 
     // Perform root propagation.
     if (!propagate()) {
-      return;
+      return stats;
     }
 
     // Check if the root is a solution. 
     // If it is not, push the next decisions to try on the decisions stack.
     if (heuristic.pushDecisions(decisions)) {
-      foundSolution();
-      return;
+      foundSolution(stats);
+      return stats;
     }
 
     // Save the root state.
     trail.newLevel();
 
     // Start the search.
-    while (!decisions.isEmpty()) {
-      nNodes++;
+    while (!decisions.isEmpty() && !stopCondition.test(stats)) {
+      stats.nNodes++;
 
       // Apply the next decision and propagate.
       if (!decisions.pop().apply() || !pQueue.propagate()) {
         trail.undoLevel();
-        nFails++;
+        stats.nFails++;
         continue;
       }
 
       // Check if the node is a solution. If not, it pushes
       // the next decisions to try on the decisions stack.
       if (heuristic.pushDecisions(decisions)) {
-        foundSolution();
+        foundSolution(stats);
         trail.undoLevel();
         continue;
       }
@@ -113,7 +102,10 @@ public class DFSearch {
       trail.newLevel();
     }
 
-    decisions.clear();
+    stats.completed = decisions.isEmpty();
     trail.undoAll();
+    decisions.clear();
+    
+    return stats;
   }
 }

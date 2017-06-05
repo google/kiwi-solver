@@ -19,6 +19,9 @@ import java.util.Arrays;
 
 import kiwi.Solver;
 import kiwi.variable.IntVar;
+import static kiwi.modeling.Heuristics.*;
+import static kiwi.modeling.Constraints.*;
+import static kiwi.modeling.Views.*;
 
 public class NQueens {
 
@@ -33,20 +36,18 @@ public class NQueens {
 
     for (int i = 0; i < n; i++) {
       queens[i] = solver.intVar(0, n - 1);
-      queensUp[i] = solver.offset(queens[i], i);
-      queensDown[i] = solver.offset(queens[i], -i);
+      queensUp[i] = offset(queens[i], i);
+      queensDown[i] = offset(queens[i], -i);
     }
 
-    solver.allDifferent(queens);
-    solver.allDifferent(queensUp);
-    solver.allDifferent(queensDown);
-
-    solver.useBinaryFirstFail(queens);
+    solver.add(allDifferent(queens));
+    solver.add(allDifferent(queensUp));
+    solver.add(allDifferent(queensDown));
 
     solver.onSolution(() -> {
       System.out.println("Solution: " + Arrays.toString(queens));
     });
     
-    solver.solve();
+    solver.solve(binaryFirstFail(queens));
   }
 }

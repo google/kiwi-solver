@@ -18,13 +18,13 @@ package kiwi.constraint;
 import kiwi.propagation.Propagator;
 import kiwi.variable.IntVar;
 
-public class LowerEqual extends Propagator {
+public class LowerEqualVar extends Propagator {
 
   private final IntVar x;
   private final IntVar y;
   private final int k;
 
-  public LowerEqual(IntVar leftVar, IntVar rightVar, boolean strict) {
+  public LowerEqualVar(IntVar leftVar, IntVar rightVar, boolean strict) {
     this.x = leftVar;
     this.y = rightVar;
     this.k = strict ? 1 : 0;

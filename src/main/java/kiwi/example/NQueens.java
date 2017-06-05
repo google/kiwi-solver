@@ -15,55 +15,41 @@
  */
 package kiwi.example;
 
-import kiwi.constraint.AllDifferent;
-import kiwi.propagation.PropagationQueue;
+import kiwi.Solver;
 import kiwi.search.BinaryVarVal;
-import kiwi.search.DFSearch;
-import kiwi.search.Heuristic;
-import kiwi.trail.Trail;
 import kiwi.variable.IntVar;
-import kiwi.variable.IntVarImpl;
-import kiwi.variable.IntVarOffset;
 
 public class NQueens {
 
   public static void main(String[] args) {
-
-    PropagationQueue pQueue = new PropagationQueue();
-    Trail trail = new Trail();
-    DFSearch search = new DFSearch(pQueue, trail);
+    
+    Solver solver = new Solver();
 
     int n = 10;
-
     IntVar[] queens = new IntVar[n];
     IntVar[] queensUp = new IntVar[n];
     IntVar[] queensDown = new IntVar[n];
 
     for (int i = 0; i < n; i++) {
-      queens[i] = new IntVarImpl(pQueue, trail, 0, n - 1);
-      queensUp[i] = new IntVarOffset(queens[i], i);
-      queensDown[i] = new IntVarOffset(queens[i], -i);
+      queens[i] = solver.intVar(0, n - 1);
+      queensUp[i] = solver.offset(queens[i], i);
+      queensDown[i] = solver.offset(queens[i], -i);
     }
 
-    AllDifferent allDiff1 = new AllDifferent(queens);
-    AllDifferent allDiff2 = new AllDifferent(queensUp);
-    AllDifferent allDiff3 = new AllDifferent(queensDown);
+    solver.allDifferent(queens);
+    solver.allDifferent(queensUp);
+    solver.allDifferent(queensDown);
 
-    allDiff1.setup();
-    allDiff2.setup();
-    allDiff3.setup();
+    solver.setHeuristic(new BinaryVarVal(queens, i -> queens[i].size()));
 
-    pQueue.enqueue(allDiff1);
-    pQueue.enqueue(allDiff2);
-    pQueue.enqueue(allDiff3);
-
-    Heuristic heuristic = new BinaryVarVal(queens, i -> queens[i].size());
-
-    long t = System.currentTimeMillis();
-    search.search(heuristic);
-    long time = System.currentTimeMillis() - t;
-
-    System.out.println("time : " + time);
-    System.out.println("nodes: " + search.getNodes());
+    solver.onSolution(() -> {
+      System.out.println("Solution: ");
+      for (IntVar q: queens) {
+        System.out.print(q);
+      }
+      System.out.println();
+    });
+    
+    solver.solve();
   }
 }

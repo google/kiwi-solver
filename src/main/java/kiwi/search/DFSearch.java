@@ -71,36 +71,38 @@ public class DFSearch {
       return stats;
     }
 
-    // Check if the root is a solution. 
-    // If it is not, push the next decisions to try on the decisions stack.
+    // Check if the root node is already a solution.
     if (heuristic.pushDecisions(decisions)) {
       foundSolution(stats);
-      return stats;
     }
 
     // Save the root state.
     trail.newLevel();
 
-    // Start the search.
+    // Start the search. The search terminates if the stack of decisions
+    // is empty (meaning that the search tree has been entirely explored) or 
+    // if the stop condition is met.
     while (!decisions.isEmpty() && !stopCondition.test(stats)) {
       stats.nNodes++;
 
-      // Apply the next decision and propagate.
-      if (!decisions.pop().apply() || !pQueue.propagate()) {
-        trail.undoLevel();
+      // Apply the next decision and propagate. This can result in a failed
+      // node in which case we restore the previous state.
+      if (!decisions.pop().apply() || !propagate()) {
         stats.nFails++;
+        trail.undoLevel();
         continue;
       }
 
-      // Check if the node is a solution. If not, it pushes
-      // the next decisions to try on the decisions stack.
+      // At this point we know that the new node is not failed and we check 
+      // that it is a solution or not. 
       if (heuristic.pushDecisions(decisions)) {
         foundSolution(stats);
         trail.undoLevel();
         continue;
       }
 
-      // Save the node state.
+      // The node is neither a failed node or a solution so we continue to 
+      // explore the branch.
       trail.newLevel();
     }
 

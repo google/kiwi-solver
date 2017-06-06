@@ -26,7 +26,7 @@ public class AllDifferent extends Propagator {
 
   public AllDifferent(IntVar[] variables) {
     unassigned = variables.clone();
-    nUnassignedT = new TrailedInt(unassigned[0].getTrail(), variables.length);
+    nUnassignedT = new TrailedInt(unassigned[0].trail(), variables.length);
   }
 
   public boolean setup() {

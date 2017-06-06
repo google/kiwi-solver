@@ -29,8 +29,8 @@ public class Sum extends Propagator {
   public Sum(IntVar[] variables, IntVar sum, int offset) {
     this.sum = sum;
     this.assigned = variables.clone();
-    this.nAssignedT = new TrailedInt(sum.getTrail(), 0);
-    this.sumAssignedT = new TrailedInt(sum.getTrail(), offset);
+    this.nAssignedT = new TrailedInt(sum.trail(), 0);
+    this.sumAssignedT = new TrailedInt(sum.trail(), offset);
   }
 
   public boolean setup() {

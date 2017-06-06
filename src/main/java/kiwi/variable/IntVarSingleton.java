@@ -32,12 +32,12 @@ public class IntVarSingleton extends IntVar {
   }
 
   @Override
-  public PropagationQueue getPropagQueue() {
+  public PropagationQueue propagQueue() {
     return pQueue;
   }
 
   @Override
-  public Trail getTrail() {
+  public Trail trail() {
     return trail;
   }
 

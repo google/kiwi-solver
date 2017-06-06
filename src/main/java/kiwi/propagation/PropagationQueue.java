@@ -31,6 +31,8 @@ public class PropagationQueue {
    * <p>
    * This method does nothing if the propagator is already enqueued.
    * </p>
+   * 
+   * @param propagator the propagator to be scheduled for propagation.
    */
   public void enqueue(Propagator propagator) {
     if (!propagator.enqueued) {

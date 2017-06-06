@@ -34,7 +34,7 @@ public class BinaryVarVal implements Heuristic {
   public BinaryVarVal(IntVar[] variables, IntUnaryOperator varCost, IntUnaryOperator valSelector) {
     this.variables = variables;
     this.unassigned = Array.makeInt(variables.length, i -> i);
-    this.nUnassignedT = new TrailedInt(variables[0].getTrail(), variables.length);
+    this.nUnassignedT = new TrailedInt(variables[0].trail(), variables.length);
     this.varCost = varCost;
     this.valSelector = valSelector;
   }

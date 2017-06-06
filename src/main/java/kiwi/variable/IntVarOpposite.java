@@ -28,12 +28,12 @@ public class IntVarOpposite extends IntVar {
     this.variable = variable;
   }
 
-  @Override public PropagationQueue getPropagQueue() {
-    return variable.getPropagQueue();
+  @Override public PropagationQueue propagQueue() {
+    return variable.propagQueue();
   }
 
-  @Override public Trail getTrail() {
-    return variable.getTrail();
+  @Override public Trail trail() {
+    return variable.trail();
   }
 
   @Override public int min() {

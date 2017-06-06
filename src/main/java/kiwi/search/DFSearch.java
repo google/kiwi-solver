@@ -60,7 +60,14 @@ public class DFSearch {
     return feasible && pQueue.propagate();
   }
 
-  /** Starts the search */
+  /** 
+   * Starts the search 
+   * 
+   * @param  heuristic the search heursitic used to build the search tree.
+   * @param  stopCondition a predicate to stop the search.
+   * @return A {@code SearchStats} object that contains some metrics related
+   *         to this tree search.
+   */
   public SearchStats search(Heuristic heuristic, Predicate<SearchStats> stopCondition) {
     SearchStats stats = new SearchStats();
     

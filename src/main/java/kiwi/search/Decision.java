@@ -25,6 +25,10 @@ package kiwi.search;
  * </p>
  */
 public interface Decision {
-  /** Applies the decision. */
+  /** 
+   * Applies the decision. 
+   * 
+   * @return {@code true} if and only if the decision did not failed directly.
+   */
   public boolean apply();
 }

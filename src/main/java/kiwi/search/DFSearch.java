@@ -65,15 +65,18 @@ public class DFSearch {
     SearchStats stats = new SearchStats();
     
     stats.startTime = System.currentTimeMillis();
-
-    // Perform root propagation.
+     
+    // Return if the root node is unfeasible.
     if (!propagate()) {
+      stats.completed = true;
       return stats;
     }
 
-    // Check if the root node is already a solution.
-    if (heuristic.pushDecisions(decisions)) {
+    // Return if the root node is already a solution.
+    if (heuristic.pushNextDecisions(decisions)) {
       foundSolution(stats);
+      stats.completed = true; 
+      return stats;
     }
 
     // Save the root state.
@@ -95,7 +98,7 @@ public class DFSearch {
 
       // At this point we know that the new node is not failed and we check 
       // that it is a solution or not. 
-      if (heuristic.pushDecisions(decisions)) {
+      if (heuristic.pushNextDecisions(decisions)) {
         foundSolution(stats);
         trail.undoLevel();
         continue;
@@ -113,10 +116,6 @@ public class DFSearch {
     // the state of the root node.
     trail.undoAll();
     decisions.clear();
-    
-    // We consider that restoring the root state is part of the search hence 
-    // we only compute the total time once the search has been reset.
-    stats.searchTime = System.currentTimeMillis() - stats.startTime;
     
     return stats;
   }

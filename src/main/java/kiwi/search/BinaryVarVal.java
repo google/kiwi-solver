@@ -39,7 +39,7 @@ public class BinaryVarVal implements Heuristic {
     this.valSelector = valSelector;
   }
 
-  public boolean pushDecisions(Stack<Decision> decisions) {
+  public boolean pushNextDecisions(Stack<Decision> decisions) {
     int varId = selectVar();
     if (varId == -1) {
       return true;

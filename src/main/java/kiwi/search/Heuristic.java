@@ -38,5 +38,5 @@ public interface Heuristic {
    * 
    * @return true if the decision stack is unchanged; false otherwise.
    */
-  public boolean pushDecisions(Stack<Decision> decisions);
+  public boolean pushNextDecisions(Stack<Decision> decisions);
 }

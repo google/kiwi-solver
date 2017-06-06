@@ -63,6 +63,8 @@ public class DFSearch {
   /** Starts the search */
   public SearchStats search(Heuristic heuristic, Predicate<SearchStats> stopCondition) {
     SearchStats stats = new SearchStats();
+    
+    stats.startTime = System.currentTimeMillis();
 
     // Perform root propagation.
     if (!propagate()) {
@@ -102,9 +104,17 @@ public class DFSearch {
       trail.newLevel();
     }
 
+    // The search is complete if there's no remaining decisions to be applied.
     stats.completed = decisions.isEmpty();
+    
+    // Clear the remaining decisions (if the search is incomplete) and restore
+    // the state of the root node.
     trail.undoAll();
     decisions.clear();
+    
+    // We consider that restoring the root state is part of the search hence 
+    // we only store the ending time once the search has been reset.
+    stats.endTime = System.currentTimeMillis();
     
     return stats;
   }

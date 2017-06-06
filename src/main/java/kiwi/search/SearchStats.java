@@ -1,9 +1,21 @@
 package kiwi.search;
 
 public class SearchStats {
-  public long startTime = System.currentTimeMillis(); 
+  public long startTime; 
+  public long endTime;
   public boolean completed;
-  public int nNodes = 0;
-  public int nFails = 0;
-  public int nSolutions = 0;
+  public int nNodes;
+  public int nFails;
+  public int nSolutions;
+  
+  @Override 
+  public String toString() {
+    StringBuffer bf = new StringBuffer();
+    bf.append(completed ? "Complete search\n" : "Incomplete search\n");
+    bf.append("search time : " + (endTime - startTime) + "ms\n");
+    bf.append("#solutions  : " + nSolutions + "\n");
+    bf.append("#nodes      : " + nNodes + "\n");
+    bf.append("#fails      : " + nFails + "\n");
+    return bf.toString();
+  }
 }

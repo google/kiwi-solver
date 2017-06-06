@@ -15,13 +15,14 @@
  */
 package kiwi.example;
 
+import static kiwi.modeling.Constraints.allDifferent;
+import static kiwi.modeling.Heuristics.binaryFirstFail;
+import static kiwi.modeling.Views.offset;
+
 import java.util.Arrays;
 
 import kiwi.Solver;
 import kiwi.variable.IntVar;
-import static kiwi.modeling.Heuristics.*;
-import static kiwi.modeling.Constraints.*;
-import static kiwi.modeling.Views.*;
 
 public class NQueens {
 

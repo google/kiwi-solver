@@ -113,8 +113,8 @@ public class DFSearch {
     decisions.clear();
     
     // We consider that restoring the root state is part of the search hence 
-    // we only store the ending time once the search has been reset.
-    stats.endTime = System.currentTimeMillis();
+    // we only compute the total time once the search has been reset.
+    stats.searchTime = System.currentTimeMillis() - stats.startTime;
     
     return stats;
   }

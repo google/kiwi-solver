@@ -329,12 +329,12 @@ public class IntVarImpl extends IntVar {
 
   @Override
   public void watchAssign(Propagator propagator) {
-    boundsWatchers.push(propagator);
+    assignWatchers.push(propagator);
   }
 
   @Override
   public void watchBounds(Propagator propagator) {
-    changeWatchers.push(propagator);
+    boundsWatchers.push(propagator);
   }
 
   private void awakeAssign() {
